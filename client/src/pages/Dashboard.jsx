@@ -8,7 +8,7 @@ import { FaEdit } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
 
 const Dashboard = () => {
-  
+  const API_URL = import.meta.env.VITE_SERVER_URL;
   const [tasks, setTasks] = useState([]);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -46,7 +46,7 @@ const Dashboard = () => {
 
   const fetchTasks = async () => {
     try {
-      const res = await axios.get('http://localhost:8000/api/tasks', config);
+      const res = await axios.get(`${API_URL}/api/tasks`, config);
       setTasks(res.data);
     } catch (error) {
       console.error("Error fetching tasks", error);
@@ -56,7 +56,7 @@ const Dashboard = () => {
   const addTask = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:8000/api/tasks', { title, description }, config);
+      await axios.post(`${API_URL}/api/tasks`, { title, description }, config);
       setTitle('');
       setDescription('');
       fetchTasks();
@@ -68,7 +68,7 @@ const Dashboard = () => {
   const toggleStatus = async (id, currentStatus) => {
     const newStatus = currentStatus === 'pending' ? 'completed' : 'pending';
     try {
-      await axios.put(`http://localhost:8000/api/tasks/${id}`, { status: newStatus }, config);
+      await axios.put(`${API_URL}/api/tasks/${id}`, { status: newStatus }, config);
       fetchTasks();
     } catch (error) {
       console.error("Error toggling status", error);
@@ -77,7 +77,7 @@ const Dashboard = () => {
 
   const deleteTask = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/tasks/${id}`, config);
+      await axios.delete(`${API_URL}/api/tasks/${id}`, config);
       fetchTasks();
     } catch (error) {
       console.error("Error deleting task", error);
@@ -98,7 +98,7 @@ const Dashboard = () => {
 
   const saveEdit = async (id) => {
     try {
-      await axios.put(`http://localhost:8000/api/tasks/${id}`, { 
+      await axios.put(`${API_URL}/api/tasks/${id}`, { 
         title: editTitle, 
         description: editDescription 
       }, config);

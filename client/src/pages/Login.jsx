@@ -3,7 +3,11 @@ import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
 import { MdOutlineDarkMode } from "react-icons/md";
 import { MdOutlineLightMode } from "react-icons/md";
+
+
 const Login = () => {
+  const API_URL = import.meta.env.VITE_SERVER_URL;
+
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -37,10 +41,11 @@ const Login = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('http://localhost:8000/api/auth/login', formData);
+      const res = await axios.post(`${API_URL}/api/auth/login`, formData);
       localStorage.setItem('token', res.data.token); // Save JWT to local storage
       navigate('/dashboard'); // Redirect to tasks
     } catch (err) {
+      console.log(err);
       setError(err.response?.data?.message || 'Login failed');
     }
   };
